@@ -1,0 +1,123 @@
+import { useState } from "react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from "recharts";
+
+const data = [
+  { year: 1995, spanien: 100, deutschland: 100 },
+  { year: 1996, spanien: 105, deutschland: 97 },
+  { year: 1997, spanien: 112, deutschland: 96 },
+  { year: 1998, spanien: 122, deutschland: 95 },
+  { year: 1999, spanien: 136, deutschland: 96 },
+  { year: 2000, spanien: 152, deutschland: 97 },
+  { year: 2001, spanien: 170, deutschland: 98 },
+  { year: 2002, spanien: 192, deutschland: 99 },
+  { year: 2003, spanien: 215, deutschland: 100 },
+  { year: 2004, spanien: 240, deutschland: 101 },
+  { year: 2005, spanien: 270, deutschland: 102 },
+  { year: 2006, spanien: 310, deutschland: 103 },
+  { year: 2007, spanien: 340, deutschland: 105 },
+  { year: 2008, spanien: 310, deutschland: 106 },
+  { year: 2009, spanien: 275, deutschland: 106 },
+  { year: 2010, spanien: 248, deutschland: 107 },
+  { year: 2011, spanien: 218, deutschland: 110 },
+  { year: 2012, spanien: 195, deutschland: 115 },
+  { year: 2013, spanien: 182, deutschland: 122 },
+  { year: 2014, spanien: 178, deutschland: 130 },
+  { year: 2015, spanien: 185, deutschland: 140 },
+  { year: 2016, spanien: 195, deutschland: 152 },
+  { year: 2017, spanien: 210, deutschland: 168 },
+  { year: 2018, spanien: 225, deutschland: 183 },
+  { year: 2019, spanien: 238, deutschland: 198 },
+  { year: 2020, spanien: 242, deutschland: 210 },
+  { year: 2021, spanien: 258, deutschland: 235 },
+  { year: 2022, spanien: 278, deutschland: 248 },
+  { year: 2023, spanien: 282, deutschland: 228 },
+  { year: 2024, spanien: 305, deutschland: 232 },
+  { year: 2025, spanien: 330, deutschland: 240 },
+];
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{ background: "#0f1923", border: "1px solid #2a3a4a", borderRadius: 6, padding: "12px 16px", fontFamily: "monospace", fontSize: 13 }}>
+        <div style={{ color: "#7a9ab0", marginBottom: 8, fontWeight: "bold" }}>Jahr {label}</div>
+        {payload.map(p => (
+          <div key={p.dataKey} style={{ color: p.color, marginBottom: 4 }}>
+            {p.dataKey === "spanien" ? "🇪🇸 Spanien" : "🇩🇪 Deutschland"}: <strong>{p.value}</strong>
+          </div>
+        ))}
+        <div style={{ color: "#4a6070", fontSize: 11, marginTop: 8 }}>Index 1995 = 100</div>
+      </div>
+    );
+  }
+  return null;
+};
+
+export default function App() {
+  return (
+    <div style={{ background: "#080d13", minHeight: "100vh", padding: "28px 20px", color: "#c9d6e3" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto" }}>
+
+        <div style={{ borderLeft: "3px solid #e8a045", paddingLeft: 16, marginBottom: 28 }}>
+          <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#4a6070", marginBottom: 6, fontFamily: "monospace" }}>
+            Immobilienmarkt · 30 Jahre
+          </div>
+          <h1 style={{ fontSize: 26, fontWeight: 900, margin: "0 0 6px", color: "#e8eef4", fontFamily: "Georgia, serif" }}>
+            <span style={{ color: "#e8a045" }}>Spanien</span> vs. <span style={{ color: "#5ba4cf" }}>Deutschland</span>
+          </h1>
+          <div style={{ fontSize: 11, color: "#4a6070", fontFamily: "monospace" }}>
+            Nominale Wohnimmobilienpreise · Index 1995 = 100
+          </div>
+        </div>
+
+        <div style={{ background: "#0f1923", border: "1px solid #1e2a38", borderRadius: 8, padding: "24px 8px 16px" }}>
+          <ResponsiveContainer width="100%" height={360}>
+            <LineChart data={data} margin={{ top: 10, right: 24, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1a2632" />
+              <XAxis dataKey="year" tick={{ fill: "#4a6070", fontSize: 11, fontFamily: "monospace" }} tickLine={false} axisLine={{ stroke: "#1e2a38" }} interval={4} />
+              <YAxis tick={{ fill: "#4a6070", fontSize: 11, fontFamily: "monospace" }} tickLine={false} axisLine={false} />
+              <Tooltip content={<CustomTooltip />} />
+              <ReferenceLine x={2007} stroke="#e8a04550" strokeDasharray="4 3" label={{ value: "ES Boom", fill: "#e8a04580", fontSize: 10 }} />
+              <ReferenceLine x={2008} stroke="#66666640" strokeDasharray="4 3" label={{ value: "Krise", fill: "#66666680", fontSize: 10 }} />
+              <ReferenceLine x={2022} stroke="#66666640" strokeDasharray="4 3" label={{ value: "Zinswende", fill: "#66666680", fontSize: 10 }} />
+              <Line type="monotone" dataKey="spanien" stroke="#e8a045" strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: "#e8a045" }} />
+              <Line type="monotone" dataKey="deutschland" stroke="#5ba4cf" strokeWidth={2.5} strokeDasharray="6 3" dot={false} activeDot={{ r: 5, fill: "#5ba4cf" }} />
+            </LineChart>
+          </ResponsiveContainer>
+
+          <div style={{ display: "flex", gap: 28, justifyContent: "center", marginTop: 12 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontFamily: "monospace" }}>
+              <div style={{ width: 24, height: 3, background: "#e8a045", borderRadius: 2 }} /> 🇪🇸 Spanien
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontFamily: "monospace" }}>
+              <div style={{ width: 24, height: 0, borderTop: "3px dashed #5ba4cf" }} /> 🇩🇪 Deutschland
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginTop: 16 }}>
+          {[
+            { jahr: "1995–2007", flag: "🇪🇸", titel: "Spanischer Boom", text: "Preise fast ×3,4 durch Niedrigzinsen & Spekulation. Deutschland stagniert.", farbe: "#e8a045" },
+            { jahr: "2008–2013", flag: "⚡", titel: "Krise & Divergenz", text: "Spanien −40 %. Deutschland stabil — profitiert als sicherer Hafen.", farbe: "#cc6666" },
+            { jahr: "2010–2022", flag: "🇩🇪", titel: "Deutschlands Boom", text: "Niedrigzinsen: +130 % in 12 Jahren. Spanien erholt sich langsam.", farbe: "#5ba4cf" },
+            { jahr: "2022–2023", flag: "📉", titel: "Zinswende", text: "Deutschland −8 bis −10 %. Spanien überraschend robust.", farbe: "#aaa" },
+            { jahr: "2024–2025", flag: "🔥", titel: "Neuer ES-Boom", text: "Madrid +20 % p.a. Stärkster Anstieg seit 2007.", farbe: "#e8a045" },
+            { jahr: "Fazit", flag: "⚖️", titel: "Heute", text: "ES: ~330 / DE: ~240 (Index). Völlig unterschiedliche Kurvenverläufe.", farbe: "#7ab88a" },
+          ].map((c, i) => (
+            <div key={i} style={{ background: "#0f1923", border: "1px solid #1e2a38", borderTop: `2px solid ${c.farbe}`, borderRadius: 6, padding: "12px 14px" }}>
+              <div style={{ fontSize: 10, color: c.farbe, fontFamily: "monospace", marginBottom: 3 }}>{c.flag} {c.jahr}</div>
+              <div style={{ fontWeight: "bold", fontSize: 12, marginBottom: 5, color: "#e8eef4", fontFamily: "Georgia, serif" }}>{c.titel}</div>
+              <div style={{ fontSize: 11, color: "#4a6070", lineHeight: 1.5, fontFamily: "monospace" }}>{c.text}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 16, fontSize: 10, color: "#2a3a4a", fontFamily: "monospace", borderTop: "1px solid #1e2a38", paddingTop: 10 }}>
+          Quellen: Dallas Fed · INE · Destatis / Bundesbank · BIS Property Prices. Daten approximiert, Index 1995 = 100.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
